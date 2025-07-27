@@ -8,22 +8,28 @@ public class QuadraticEquationImpl implements QuadraticEquation {
     public double[] solve(double a, double b, double c) {
         double epsilon = 1e-9;
 
+        if (Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c) ||
+                Double.isInfinite(a) || Double.isInfinite(b) || Double.isInfinite(c)) {
+            throw new IllegalArgumentException("Coefficients must be finite numbers");
+        }
+
         if (Math.abs(a) < epsilon) {
             throw new IllegalArgumentException("Coefficient 'a' must not be zero");
         }
 
         double discriminant = b * b - 4 * a * c;
 
-        if (discriminant < -epsilon) {
-            return new double[0]; // No real roots
+        if (discriminant > epsilon) {
+            double sqrtD = Math.sqrt(discriminant);
+            return new double[]{
+                    (-b + sqrtD) / (2 * a),
+                    (-b - sqrtD) / (2 * a)
+            };
         } else if (Math.abs(discriminant) < epsilon) {
             double root = -b / (2 * a);
-            return new double[]{root}; // One real root
+            return new double[]{root};
         } else {
-            double sqrt = Math.sqrt(discriminant);
-            double root1 = (-b + sqrt) / (2 * a);
-            double root2 = (-b - sqrt) / (2 * a);
-            return new double[]{root1, root2}; // Two real roots
+            return new double[]{}; // No real roots
         }
     }
 }
