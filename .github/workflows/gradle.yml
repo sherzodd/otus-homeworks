@@ -23,5 +23,8 @@ jobs:
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build and Test with verbose output
+        run: |
+          ./gradlew clean build test --info --continue
+          echo "=== Test Summary ==="
+          ./gradlew test --dry-run | grep -E "^> Task :test" || true
